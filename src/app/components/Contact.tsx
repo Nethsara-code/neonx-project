@@ -1,10 +1,12 @@
 import { motion, useInView } from 'motion/react';
 import { useRef, useState } from 'react';
 import { Mail, Phone, Send, MapPin, MessageSquare } from 'lucide-react';
+import emailjs from '@emailjs/browser';
 
 export function Contact() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.3 });
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -13,14 +15,6 @@ export function Contact() {
     message: ''
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle form submission
-    console.log('Form submitted:', formData);
-    alert('Thank you for your message! We will get back to you soon.');
-    setFormData({ name: '', email: '', phone: '', service: '', message: '' });
-  };
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({
       ...formData,
@@ -28,16 +22,43 @@ export function Contact() {
     });
   };
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    emailjs.send(
+      'YOUR_SERVICE_ID', // replace with your EmailJS Service ID
+      'YOUR_TEMPLATE_ID', // replace with your EmailJS Template ID
+      {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        service: formData.service,
+        message: formData.message
+      },
+      'YOUR_PUBLIC_KEY' // replace with your EmailJS Public Key
+    ).then(
+      () => {
+        alert('Thank you for your message! We will get back to you soon.');
+        setFormData({ name: '', email: '', phone: '', service: '', message: '' });
+      },
+      (error) => {
+        console.error('Email send error:', error);
+        alert('Oops! Something went wrong. Please try again later.');
+      }
+    );
+  };
+
   const contactInfo = [
-    { icon: Mail, label: 'Email', value: 'hello@neonx.dev', href: 'mailto:hello@neonx.dev' },
-    { icon: Phone, label: 'Phone', value: '+1 (555) 123-4567', href: 'tel:+15551234567' },
-    { icon: MessageSquare, label: 'WhatsApp', value: '+1 (555) 123-4567', href: 'https://wa.me/15551234567' },
-    { icon: MapPin, label: 'Location', value: 'San Francisco, CA', href: '#' }
+    { icon: Mail, label: 'Email', value: 'info.neonxdev@gmail.com', href: 'mailto:info.neonxdev@gmail.com' },
+    { icon: Phone, label: 'Phone', value: '+94 74 368 5240', href: 'tel:+94 74 368 5240' },
+    { icon: MessageSquare, label: 'WhatsApp', value: '+94 74 368 5240', href: 'https://wa.me/+94743685240' },
+    { icon: MapPin, label: 'Location', value: 'Colombo', href: '#' }
   ];
 
   return (
     <section id="contact" className="section contact-section" ref={ref}>
       <div className="section-container">
+        {/* Section Header */}
         <motion.div
           className="section-header"
           initial={{ opacity: 0, y: 50 }}
@@ -52,6 +73,7 @@ export function Contact() {
         </motion.div>
 
         <div className="contact-content">
+          {/* Contact Info */}
           <motion.div
             className="contact-info-section"
             initial={{ opacity: 0, x: -50 }}
@@ -61,7 +83,7 @@ export function Contact() {
             <div className="glass-card contact-info-card">
               <h3>Contact Information</h3>
               <p>Reach out to us through any of these channels</p>
-              
+
               <div className="contact-info-list">
                 {contactInfo.map((info, index) => (
                   <motion.a
@@ -87,6 +109,7 @@ export function Contact() {
             </div>
           </motion.div>
 
+          {/* Contact Form */}
           <motion.div
             className="contact-form-section"
             initial={{ opacity: 0, x: 50 }}
