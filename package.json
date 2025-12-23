@@ -1,11 +1,11 @@
 {
   "name": "@figma/my-make-file",
   "private": true,
-  "version": "0.0.1",
+  "build": "chmod +x node_modules/.bin/vite && vite build",
   "type": "module",
   "scripts": {
     "build": "vite build",
-    "dev": "vite"
+    "vercel-build": "npm ci && npm run build"
   },
   "dependencies": {
     "@emotion/react": "11.14.0",
