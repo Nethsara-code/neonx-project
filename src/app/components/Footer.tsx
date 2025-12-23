@@ -119,7 +119,7 @@ export function Footer() {
               © {currentYear} NEONX. All rights reserved.
             </p>
             <p className="made-with">
-              Made with <Heart size={16} className="heart-icon" /> by Prasad Nirmal & Hirusha Nethsara
+              Made with <Heart size={16} className="heart-icon" /> by NEONX Team
             </p>
           </div>
         </div>
