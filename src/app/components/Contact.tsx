@@ -60,8 +60,8 @@ export function Contact() {
 
   const contactInfo = [
     { icon: Mail, label: 'Email', value: 'info.neonxdev@gmail.com', href: 'mailto:info.neonxdev@gmail.com' },
-    { icon: Phone, label: 'Phone', value: '+94 74 368 5240', href: 'tel:+94 74 368 5240' },
-    { icon: MessageSquare, label: 'WhatsApp', value: '+94 74 368 5240', href: 'https://wa.me/+94743685240' },
+    { icon: Phone, label: 'Phone', value: '+94 74 368 5240 / +94 75 467 1921', href: 'tel:+94 74 368 5240' },
+    { icon: MessageSquare, label: 'WhatsApp', value: '+94 74 368 5240 / +94 75 467 1921', href: 'https://wa.me/+94743685240' },
     { icon: MapPin, label: 'Location', value: 'Colombo', href: '#' }
   ];
 

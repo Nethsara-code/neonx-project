@@ -16,7 +16,8 @@ export function Footer() {
     { label: 'Business Software', href: '#services' },
     { label: 'Web Development', href: '#services' },
     { label: 'Mobile Apps', href: '#services' },
-    { label: 'University Projects', href: '#university' }
+    { label: 'University Projects', href: '#university' },
+    { label: 'AI Solution', href: '#services' }
   ];
 
   const socialLinks = [
@@ -98,13 +99,13 @@ export function Footer() {
               <h4>Contact</h4>
               <ul>
                 <li>
-                  <a href="mailto:hello@neonx.dev">hello@neonx.dev</a>
+                  <a href="mailto:hello@neonx.dev">info.neonxdev@gmail.com</a>
                 </li>
                 <li>
-                  <a href="tel:+15551234567">+1 (555) 123-4567</a>
+                  <a href="tel:+15551234567">+94 74 368 5240 <br/>+94 75 467 1921</a>
                 </li>
                 <li>
-                  <span>San Francisco, CA</span>
+                  <span>Colombo</span>
                 </li>
               </ul>
             </div>
@@ -118,7 +119,7 @@ export function Footer() {
               © {currentYear} NEONX. All rights reserved.
             </p>
             <p className="made-with">
-              Made with <Heart size={16} className="heart-icon" /> by NEONX Team
+              Made with <Heart size={16} className="heart-icon" /> by Prasad Nirmal & Hirusha Nethsara
             </p>
           </div>
         </div>

@@ -1,6 +1,6 @@
 import { motion, useInView } from 'motion/react';
 import { useRef } from 'react';
-import { Code, Globe, Smartphone, Building2, GraduationCap, Sparkles } from 'lucide-react';
+import { Code, Globe, Smartphone, Building2, GraduationCap, Sparkles, Cpu } from 'lucide-react'; // Added Cpu icon for AI
 
 export function Services() {
   const ref = useRef(null);
@@ -42,6 +42,12 @@ export function Services() {
       title: 'University Software Projects',
       description: 'Complete final-year and academic projects with documentation, reports, and code explanation guidance.',
       gradient: 'pink'
+    },
+    {
+      icon: Cpu,
+      title: 'AI Solutions',
+      description: 'Artificial Intelligence integration, machine learning models, and smart automation for businesses.',
+      gradient: 'yellow' // new gradient for AI card
     }
   ];
 
