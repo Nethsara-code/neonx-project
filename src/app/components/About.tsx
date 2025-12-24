@@ -8,6 +8,25 @@ export function About() {
   const ref = useRef<HTMLDivElement | null>(null);
   const isInView = useInView(ref, { once: true, amount: 0.3 });
 
+  /* ================= About Us Features ================= */
+  const features = [
+    {
+      title: 'Our Mission',
+      description:
+        'To deliver requirement-based, customer-focused software development solutions that empower businesses and students with modern technology.'
+    },
+    {
+      title: 'Our Vision',
+      description:
+        'To become the leading software development partner for businesses and educational institutions, driving innovation through cutting-edge solutions.'
+    },
+    {
+      title: 'Our Approach',
+      description:
+        'We combine futuristic technology with practical solutions, ensuring every project is tailored to meet specific client needs and objectives.'
+    }
+  ];
+
   /* ================= Co-Founders ================= */
   const coFounders = [
     {
@@ -37,18 +56,67 @@ export function About() {
       }}
     >
       <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-        {/* ===== Section Title ===== */}
+
+        {/* ================= About Us Header ================= */}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6 }}
+          style={{ textAlign: 'center', marginBottom: '3.5rem' }}
+        >
+          <span style={{ color: '#0ff', fontWeight: 600 }}>Who We Are</span>
+          <h2 style={{ fontSize: '2.8rem', margin: '0.5rem 0' }}>About NEONX</h2>
+          <p style={{ maxWidth: 850, margin: '0 auto', color: '#aaa' }}>
+            We are a next-generation software development company specializing in
+            custom business systems, web & mobile applications, and university-level
+            software projects. Our mission is to transform ideas into powerful
+            digital solutions.
+          </p>
+        </motion.div>
+
+        {/* ================= Features Grid ================= */}
+        <div
+          style={{
+            display: 'grid',
+            gap: '1.8rem',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+            marginBottom: '5rem'
+          }}
+        >
+          {features.map((feature, index) => (
+            <motion.div
+              key={feature.title}
+              initial={{ opacity: 0, y: 30 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5, delay: index * 0.2 }}
+              style={{
+                padding: '1.8rem',
+                borderRadius: '1.2rem',
+                background: 'rgba(255,255,255,0.05)',
+                boxShadow: '0 0 18px rgba(0,255,255,0.25)',
+                backdropFilter: 'blur(8px)',
+                textAlign: 'center'
+              }}
+            >
+              <h3 style={{ marginBottom: '0.6rem' }}>{feature.title}</h3>
+              <p style={{ color: '#aaa', lineHeight: 1.6 }}>
+                {feature.description}
+              </p>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* ================= Co-Founders ================= */}
         <h3
           style={{
             textAlign: 'center',
             marginBottom: '3rem',
-            fontSize: '2.8rem'
+            fontSize: '2.6rem'
           }}
         >
           Our Co-Founders
         </h3>
 
-        {/* ===== Cards Grid ===== */}
         <div
           style={{
             display: 'grid',
@@ -66,16 +134,16 @@ export function About() {
               style={{
                 width: '100%',
                 maxWidth: 500,
-                padding: '2rem',
-                borderRadius: '1.4rem',
+                padding: '2.2rem',
+                borderRadius: '1.5rem',
                 background:
                   'linear-gradient(135deg, rgba(0,255,255,0.15), rgba(255,255,255,0.05))',
                 boxShadow:
-                  '0 0 30px rgba(0,255,255,0.3), inset 0 0 20px rgba(255,255,255,0.05)',
+                  '0 0 30px rgba(0,255,255,0.35), inset 0 0 18px rgba(255,255,255,0.05)',
                 backdropFilter: 'blur(12px)'
               }}
             >
-              {/* ===== Top Content ===== */}
+              {/* Top Row */}
               <div
                 style={{
                   display: 'flex',
@@ -88,8 +156,8 @@ export function About() {
                   src={co.photo}
                   alt={co.name}
                   style={{
-                    width: 140,
-                    height: 140,
+                    width: 150,
+                    height: 150,
                     borderRadius: '50%',
                     objectFit: 'cover',
                     border: '3px solid #0ff'
@@ -97,14 +165,14 @@ export function About() {
                 />
 
                 <div>
-                  <h4 style={{ margin: 0, fontSize: '1.6rem' }}>
+                  <h4 style={{ margin: 0, fontSize: '1.7rem' }}>
                     {co.name}
                   </h4>
                   <p
                     style={{
                       marginTop: 6,
-                      color: '#0ff',
-                      fontSize: '1.05rem'
+                      fontSize: '1.05rem',
+                      color: '#0ff'
                     }}
                   >
                     {co.position}
@@ -112,13 +180,12 @@ export function About() {
                 </div>
               </div>
 
-              {/* ===== LinkedIn Only ===== */}
+              {/* LinkedIn Center */}
               <div
                 style={{
-                  marginTop: '0.5rem',
+                  marginTop: '1.6rem',
                   display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center'
+                  justifyContent: 'center'
                 }}
               >
                 <a
@@ -145,16 +212,16 @@ export function About() {
   );
 }
 
-/* ===== LinkedIn Icon Style ===== */
+/* ================= Icon Style ================= */
 const iconStyle: React.CSSProperties = {
-  width: 44,
-  height: 44,
+  width: 46,
+  height: 46,
   borderRadius: '50%',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
   background: 'rgba(0,255,255,0.15)',
   color: '#0ff',
-  boxShadow: '0 0 12px rgba(0,255,255,0.4)',
-  transition: 'opacity 0.3s ease'
+  boxShadow: '0 0 14px rgba(0,255,255,0.45)',
+  textDecoration: 'none'
 };
