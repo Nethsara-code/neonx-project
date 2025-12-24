@@ -2,16 +2,27 @@ import { motion, useInView } from 'motion/react';
 import { useRef, useState, useEffect } from 'react';
 import { Send, Trash2 } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
-import { auth, provider, db } from './firebase';
-import { signInWithPopup, User } from "firebase/auth";
-import { collection, addDoc, deleteDoc, doc, onSnapshot, query, orderBy, DocumentData, QuerySnapshot } from 'firebase/firestore';
 
 /* ================= Navbar ================= */
 export function Navbar() {
   return (
-    <nav style={{ padding: '1rem 2rem', background: '#111', display: 'flex', gap: '1rem', position: 'sticky', top: 0, zIndex: 100 }}>
-      <a href="#projects" style={{ color: '#0ff', fontWeight: 600 }}>Projects</a>
-      <a href="#contact" style={{ color: '#0ff', fontWeight: 600 }}>Contact</a>
+    <nav
+      style={{
+        padding: '1rem 2rem',
+        background: '#111',
+        display: 'flex',
+        gap: '1rem',
+        position: 'sticky',
+        top: 0,
+        zIndex: 100
+      }}
+    >
+      <a href="#projects" style={{ color: '#0ff', fontWeight: 600 }}>
+        Projects
+      </a>
+      <a href="#contact" style={{ color: '#0ff', fontWeight: 600 }}>
+        Contact
+      </a>
     </nav>
   );
 }
@@ -79,86 +90,136 @@ function RainEffect() {
     };
   }, []);
 
-  return <canvas ref={canvasRef} style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0 }} />;
+  return (
+    <canvas
+      ref={canvasRef}
+      style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0 }}
+    />
+  );
+}
+
+/* ================= Star Component ================= */
+function Star({ size = 16, color = '#ffd700' }: { size?: number; color?: string }) {
+  return (
+    <svg
+      height={size}
+      width={size}
+      viewBox="0 0 24 24"
+      fill={color}
+      stroke={color}
+      strokeWidth="1"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <polygon points="12,2 15,9 22,9 17,14 19,21 12,17 5,21 7,14 2,9 9,9" />
+    </svg>
+  );
 }
 
 /* ================= Projects + Feedback ================= */
-interface Feedback {
-  id: string;
-  name: string;
-  email?: string;
-  photoURL?: string;
-  message: string;
-  createdAt: string;
-}
-
 export function Projects() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.2 });
 
   const projects = [
-    { title: 'Enterprise ERP System', description: 'Comprehensive enterprise resource planning system.', image: 'https://images.unsplash.com/photo-1759752394755-1241472b589d' },
-    { title: 'E-Commerce Platform', description: 'Online shopping platform with admin dashboard.', image: 'https://images.unsplash.com/photo-1762279388952-85187155e48d' }
+    {
+      title: 'Enterprise ERP System',
+      description: 'Comprehensive enterprise resource planning system.',
+      image: 'https://images.unsplash.com/photo-1759752394755-1241472b589d',
+      tags: ['React', 'Node.js']
+    },
+    {
+      title: 'E-Commerce Platform',
+      description: 'Online shopping platform with admin dashboard.',
+      image: 'https://images.unsplash.com/photo-1762279388952-85187155e48d',
+      tags: ['React', 'MongoDB']
+    }
   ];
 
-  const [user, setUser] = useState<User | null>(null);
+  /* ===== Feedback State ===== */
+  const [name, setName] = useState('');
   const [message, setMessage] = useState('');
-  const [feedbacks, setFeedbacks] = useState<Feedback[]>([]);
+  const [feedbacks, setFeedbacks] = useState<{
+    id: number;
+    name: string;
+    message: string;
+    date: string;
+  }[]>([]);
   const [showAll, setShowAll] = useState(false);
 
-  /* ===== Google Login ===== */
-  const loginWithGoogle = async () => {
-    try {
-      const result = await signInWithPopup(auth, provider);
-      setUser(result.user);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  /* ===== Firestore Realtime Listener ===== */
   useEffect(() => {
-    const q = query(collection(db, 'projectFeedbacks'), orderBy('createdAt', 'desc'));
-    const unsub = onSnapshot(q, (snapshot: QuerySnapshot<DocumentData>) => {
-      const data = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      })) as Feedback[];
-      setFeedbacks(data);
-    });
-    return () => unsub();
+    const saved = localStorage.getItem('project-feedbacks');
+    if (saved) setFeedbacks(JSON.parse(saved));
   }, []);
 
-  const submitFeedback = async () => {
-    if (!message.trim() || !user) return;
+  useEffect(() => {
+    localStorage.setItem('project-feedbacks', JSON.stringify(feedbacks));
+  }, [feedbacks]);
 
-    await addDoc(collection(db, 'projectFeedbacks'), {
-      name: user.displayName,
-      email: user.email,
-      photoURL: user.photoURL,
-      message,
-      createdAt: new Date().toISOString()
-    });
-
+  const submitFeedback = () => {
+    if (!message.trim()) return;
+    setFeedbacks([
+      {
+        id: Date.now(),
+        name: name || 'Anonymous',
+        message,
+        date: new Date().toLocaleString()
+      },
+      ...feedbacks
+    ]);
+    setName('');
     setMessage('');
   };
 
-  const deleteFeedback = async (id: string) => {
-    await deleteDoc(doc(db, 'projectFeedbacks', id));
+  const deleteFeedback = (id: number) => {
+    setFeedbacks(feedbacks.filter(f => f.id !== id));
   };
 
   return (
-    <section id="projects" ref={ref} style={{ position: 'relative', padding: '5rem 2rem', background: '#0d0d0d', color: '#fff', overflow: 'hidden' }}>
+    <section
+      id="projects"
+      ref={ref}
+      style={{
+        position: 'relative',
+        padding: '5rem 2rem',
+        background: '#0d0d0d',
+        color: '#fff',
+        overflow: 'hidden'
+      }}
+    >
       <RainEffect />
 
       <div style={{ position: 'relative', zIndex: 1, maxWidth: 1200, margin: '0 auto' }}>
-        <motion.h2 initial={{ opacity: 0, y: 40 }} animate={isInView ? { opacity: 1, y: 0 } : {}} style={{ textAlign: 'center', marginBottom: '3rem', fontSize: '2.5rem' }}>
+        <motion.h2
+          initial={{ opacity: 0, y: 40 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          style={{ textAlign: 'center', marginBottom: '3rem', fontSize: '2.5rem' }}
+        >
           Featured Projects
         </motion.h2>
 
-        <div style={{ display: 'grid', gap: '2rem', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' }}>
+        {/* ===== Projects Grid ===== */}
+        <div
+          style={{
+            display: 'grid',
+            gap: '2rem',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))'
+          }}
+        >
           {projects.map((project, index) => (
-            <motion.div key={project.title} initial={{ opacity: 0, y: 50 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ delay: index * 0.2 }} style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '1rem', overflow: 'hidden', boxShadow: '0 0 25px rgba(0,255,255,0.25)', backdropFilter: 'blur(6px)' }}>
+            <motion.div
+              key={project.title}
+              initial={{ opacity: 0, y: 50 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ delay: index * 0.2 }}
+              style={{
+                background: 'rgba(255,255,255,0.05)',
+                borderRadius: '1rem',
+                overflow: 'hidden',
+                boxShadow: '0 0 25px rgba(0,255,255,0.25)',
+                backdropFilter: 'blur(6px)'
+              }}
+            >
               <ImageWithFallback src={project.image} alt={project.title} />
               <div style={{ padding: '1.5rem' }}>
                 <h3>{project.title}</h3>
@@ -168,31 +229,69 @@ export function Projects() {
           ))}
         </div>
 
-        {/* ===== Feedback Form ===== */}
-        <div style={cardStyle}>
-          {!user ? (
-            <button onClick={loginWithGoogle} style={btnStyle}>Sign in with Google</button>
-          ) : (
-            <>
-              <p>Logged in as {user.displayName}</p>
-              <textarea placeholder="Your feedback..." value={message} onChange={e => setMessage(e.target.value)} rows={4} style={inputStyle} />
-              <button onClick={submitFeedback} style={btnStyle}><Send size={16} /> Send Feedback</button>
-            </>
-          )}
-        </div>
+        {/* ===== Feedback Cards with Title ===== */}
+        <div style={{ marginTop: '4rem' }}>
+          <h3 style={{ textAlign: 'center', marginBottom: '1.5rem', fontSize: '1.8rem' }}>
+            💬 What People Are Saying
+          </h3>
 
-        {/* ===== Feedback List ===== */}
-        <div style={{ marginTop: '3rem', display: 'grid', gap: '1rem' }}>
-          {(showAll ? feedbacks : feedbacks.slice(0, 3)).map(f => (
-            <motion.div key={f.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={feedbackBox}>
-              {f.photoURL && <img src={f.photoURL} alt={f.name} style={{ width: 32, height: 32, borderRadius: '50%', marginRight: 8 }} />}
-              <strong>{f.name}</strong>
-              <p>{f.message}</p>
-              <small>{new Date(f.createdAt).toLocaleString()}</small>
-              <button onClick={() => deleteFeedback(f.id)} style={deleteBtn}><Trash2 size={14} /></button>
-            </motion.div>
-          ))}
-          {feedbacks.length > 3 && <button onClick={() => setShowAll(!showAll)} style={seeMoreBtn}>{showAll ? 'Show Less' : `See More (${feedbacks.length - 3})`}</button>}
+          <div
+            style={{
+              display: 'grid',
+              gap: '1.5rem',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))'
+            }}
+          >
+            {[
+              {
+                id: 1,
+                name: 'Alice Johnson',
+                photo: 'https://randomuser.me/api/portraits/women/44.jpg',
+                message: 'Amazing project, really helped our team streamline processes!',
+                date: '2025-12-24 10:30 AM',
+                rating: 5
+              },
+              {
+                id: 2,
+                name: 'Bob Smith',
+                photo: 'https://randomuser.me/api/portraits/men/32.jpg',
+                message: 'The UI is very clean and intuitive. Loved it!',
+                date: '2025-12-23 03:15 PM',
+                rating: 4
+              }
+            ].map(f => (
+              <motion.div
+                key={f.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                style={{
+                  position: 'relative',
+                  padding: '1rem 1.5rem',
+                  borderRadius: '1rem',
+                  background: 'rgba(255,255,255,0.05)',
+                  boxShadow: '0 0 15px rgba(0,255,255,0.2)',
+                  backdropFilter: 'blur(6px)',
+                  transition: 'transform 0.2s ease',
+                  cursor: 'pointer'
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: 8 }}>
+                  <img src={f.photo} alt={f.name} style={{ width: 50, height: 50, borderRadius: '50%' }} />
+                  <strong>{f.name}</strong>
+                </div>
+
+                <div style={{ display: 'flex', gap: 2, marginBottom: 8 }}>
+                  {[1, 2, 3, 4, 5].map(i => (
+                    <Star key={i} size={16} color={i <= f.rating ? '#ffd700' : '#555'} />
+                  ))}
+                </div>
+
+                <p style={{ marginBottom: 8 }}>{f.message}</p>
+                <small style={{ color: '#888' }}>{f.date}</small>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </div>
     </section>
@@ -200,9 +299,33 @@ export function Projects() {
 }
 
 /* ================= Styles ================= */
-const inputStyle: React.CSSProperties = { width: '100%', marginBottom: '1rem', padding: '0.75rem', borderRadius: '0.6rem', border: '1px solid #0ff', background: '#111', color: '#fff' };
-const btnStyle: React.CSSProperties = { width: '100%', background: '#0ff', color: '#000', border: 'none', padding: '0.75rem', borderRadius: '0.6rem', fontWeight: 600, cursor: 'pointer' };
-const cardStyle: React.CSSProperties = { maxWidth: 600, margin: '4rem auto 0', padding: '2rem', background: 'rgba(255,255,255,0.05)', borderRadius: '1rem', boxShadow: '0 0 30px rgba(0,255,255,0.3)', backdropFilter: 'blur(8px)' };
-const feedbackBox: React.CSSProperties = { position: 'relative', padding: '1rem', borderRadius: '0.75rem', background: 'rgba(255,255,255,0.06)', borderLeft: '3px solid #0ff', display: 'flex', alignItems: 'center', gap: '0.5rem' };
-const deleteBtn: React.CSSProperties = { marginLeft: 'auto', background: 'none', border: 'none', color: '#ff6b6b', cursor: 'pointer' };
-const seeMoreBtn: React.CSSProperties = { marginTop: '1rem', background: 'none', border: '1px solid #0ff', color: '#0ff', padding: '0.5rem 1rem', borderRadius: '0.5rem', cursor: 'pointer', justifySelf: 'center', width: 'fit-content', alignSelf: 'center' };
+const inputStyle: React.CSSProperties = {
+  width: '100%',
+  marginBottom: '1rem',
+  padding: '1.75rem',
+  borderRadius: '0.6rem',
+  border: '1px solid #0ff',
+  background: '#111',
+  color: '#fff'
+};
+
+const btnStyle: React.CSSProperties = {
+  width: '100%',
+  background: '#0ff',
+  color: '#000',
+  border: 'none',
+  padding: '0.75rem',
+  borderRadius: '0.6rem',
+  fontWeight: 600,
+  cursor: 'pointer'
+};
+
+const cardStyle: React.CSSProperties = {
+  maxWidth: 600,
+  margin: '4rem auto 0',
+  padding: '2rem',
+  background: 'rgba(255,255,255,0.05)',
+  borderRadius: '1rem',
+  boxShadow: '0 0 30px rgba(0,255,255,0.3)',
+  backdropFilter: 'blur(8px)'
+};
