@@ -62,11 +62,38 @@ export function About() {
           initial={{ opacity: 0, y: 40 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          style={{ textAlign: 'center', marginBottom: '3.5rem' }}
+          style={{ textAlign: 'center', marginBottom: '4rem' }}
         >
-          <span style={{ color: '#0ff', fontWeight: 600 }}>Who We Are</span>
-          <h2 style={{ fontSize: '2.8rem', margin: '0.5rem 0' }}>About NEONX</h2>
-          <p style={{ maxWidth: 850, margin: '0 auto', color: '#aaa' }}>
+          <span
+            style={{
+              color: '#0ff',
+              fontWeight: 600,
+              fontSize: '1.1rem'
+            }}
+          >
+            Who We Are
+          </span>
+
+          <h2
+            style={{
+              fontSize: '3.8rem',
+              margin: '0.8rem 0',
+              fontWeight: 700,
+              letterSpacing: '1px'
+            }}
+          >
+            About NEONX
+          </h2>
+
+          <p
+            style={{
+              maxWidth: 900,
+              margin: '0 auto',
+              color: '#bbb',
+              fontSize: '1.1rem',
+              lineHeight: 1.8
+            }}
+          >
             We are a next-generation software development company specializing in
             custom business systems, web & mobile applications, and university-level
             software projects. Our mission is to transform ideas into powerful
@@ -78,9 +105,9 @@ export function About() {
         <div
           style={{
             display: 'grid',
-            gap: '1.8rem',
+            gap: '2rem',
             gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-            marginBottom: '5rem'
+            marginBottom: '5.5rem'
           }}
         >
           {features.map((feature, index) => (
@@ -90,16 +117,31 @@ export function About() {
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: index * 0.2 }}
               style={{
-                padding: '1.8rem',
-                borderRadius: '1.2rem',
+                padding: '2rem',
+                borderRadius: '1.3rem',
                 background: 'rgba(255,255,255,0.05)',
-                boxShadow: '0 0 18px rgba(0,255,255,0.25)',
+                boxShadow: '0 0 22px rgba(0,255,255,0.25)',
                 backdropFilter: 'blur(8px)',
                 textAlign: 'center'
               }}
             >
-              <h3 style={{ marginBottom: '0.6rem' }}>{feature.title}</h3>
-              <p style={{ color: '#aaa', lineHeight: 1.6 }}>
+              <h3
+                style={{
+                  marginBottom: '0.8rem',
+                  fontSize: '1.7rem',
+                  fontWeight: 600
+                }}
+              >
+                {feature.title}
+              </h3>
+
+              <p
+                style={{
+                  color: '#bbb',
+                  lineHeight: 1.75,
+                  fontSize: '1.05rem'
+                }}
+              >
                 {feature.description}
               </p>
             </motion.div>
@@ -111,7 +153,7 @@ export function About() {
           style={{
             textAlign: 'center',
             marginBottom: '3rem',
-            fontSize: '2.6rem'
+            fontSize: '2.7rem'
           }}
         >
           Our Co-Founders
@@ -134,12 +176,12 @@ export function About() {
               style={{
                 width: '100%',
                 maxWidth: 500,
-                padding: '2.2rem',
-                borderRadius: '1.5rem',
+                padding: '2.4rem',
+                borderRadius: '1.6rem',
                 background:
-                  'linear-gradient(135deg, rgba(0,255,255,0.15), rgba(255,255,255,0.05))',
+                  'linear-gradient(135deg, rgba(0,255,255,0.18), rgba(255,255,255,0.05))',
                 boxShadow:
-                  '0 0 30px rgba(0,255,255,0.35), inset 0 0 18px rgba(255,255,255,0.05)',
+                  '0 0 35px rgba(0,255,255,0.4), inset 0 0 18px rgba(255,255,255,0.05)',
                 backdropFilter: 'blur(12px)'
               }}
             >
@@ -147,7 +189,7 @@ export function About() {
               <div
                 style={{
                   display: 'flex',
-                  gap: '1.5rem',
+                  gap: '1.6rem',
                   alignItems: 'center',
                   flexWrap: 'wrap'
                 }}
@@ -165,13 +207,13 @@ export function About() {
                 />
 
                 <div>
-                  <h4 style={{ margin: 0, fontSize: '1.7rem' }}>
+                  <h4 style={{ margin: 0, fontSize: '1.8rem' }}>
                     {co.name}
                   </h4>
                   <p
                     style={{
                       marginTop: 6,
-                      fontSize: '1.05rem',
+                      fontSize: '1.1rem',
                       color: '#0ff'
                     }}
                   >
@@ -183,7 +225,7 @@ export function About() {
               {/* LinkedIn Center */}
               <div
                 style={{
-                  marginTop: '1.6rem',
+                  marginTop: '1.2rem',
                   display: 'flex',
                   justifyContent: 'center'
                 }}
@@ -214,14 +256,14 @@ export function About() {
 
 /* ================= Icon Style ================= */
 const iconStyle: React.CSSProperties = {
-  width: 46,
-  height: 46,
+  width: 48,
+  height: 48,
   borderRadius: '50%',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  background: 'rgba(0,255,255,0.15)',
+  background: 'rgba(0,255,255,0.18)',
   color: '#0ff',
-  boxShadow: '0 0 14px rgba(0,255,255,0.45)',
+  boxShadow: '0 0 16px rgba(0,255,255,0.45)',
   textDecoration: 'none'
 };
