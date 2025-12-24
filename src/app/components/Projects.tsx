@@ -48,15 +48,15 @@ function RainEffect() {
     resize();
     window.addEventListener('resize', resize);
 
-    for (let i = 0; i < numDrops; i++) {
-      drops.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        l: Math.random() * 6 + 4,
-        xs: Math.random() * 2 - 1,
-        ys: Math.random() * 3 + 2
-      });
-    }
+    // for (let i = 0; i < numDrops; i++) {
+    //   drops.push({
+    //     x: Math.random() * canvas.width,
+    //     y: Math.random() * canvas.height,
+    //     l: Math.random() * 6 + 4,
+    //     xs: Math.random() * 2 - 1,
+    //     ys: Math.random() * 3 + 2
+    //   });
+    // }
 
     const draw = () => {
       ctx.fillStyle = 'rgba(10,10,10,0.35)';
