@@ -49,7 +49,7 @@ export function Footer() {
               <div className="logo-glow" />
             </motion.div>
             <p className="footer-tagline">
-              Building Neon-Powered Software Solutions for the Future
+              Building Neon-Powered AI Integrated Software Solutions for the Future
             </p>
             <div className="social-links">
               {socialLinks.map((social) => (
